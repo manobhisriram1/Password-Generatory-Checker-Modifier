@@ -6,10 +6,6 @@ Welcome to the Cybersecurity Tools repository! This project includes three essen
 - [Introduction](#introduction)
 - [Features](#features)
 - [How to Use](#how-to-use)
-- [Installation](#installation)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
 
 ## Introduction
 
