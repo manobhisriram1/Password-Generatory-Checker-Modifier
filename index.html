@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cybersecurity Tools</title>
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #4a54f1, #24c6dc);
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: linear-gradient(135deg, #4a54f1, #24c6dc);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        nav li {
+            display: inline;
+            margin: 0 15px;
+        }
+
+        nav a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            padding: 10px 20px;
+            background: #4a54f1;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+
+        nav a:hover {
+            background: #354c9c;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        h2 {
+            color: #4a54f1;
+            border-bottom: 2px solid #4a54f1;
+            padding-bottom: 10px;
+        }
+
+        form {
+            background: #f7f9fc;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        input[type="number"], input[type="password"], input[type="checkbox"], button {
+            margin-top: 5px;
+        }
+
+        input[type="number"], input[type="password"], input[type="checkbox"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group label {
+            display: inline-block;
+            width: 48%;
+        }
+
+        button {
+            background: #4a54f1;
+            color: #fff;
+            padding: 15px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background: #354c9c;
+        }
+
+        #generatedPassword, #modifiedPassword {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .input-container {
+            margin-bottom: 20px;
+        }
+
+        .strength-container {
+            margin-top: 20px;
+        }
+
+        #password-strength, #password-criteria {
+            font-size: 1.1em;
+            margin: 5px 0;
+        }
+
+        .good {
+            color: #4CAF50;
+        }
+
+        .moderate {
+            color: #FFC107;
+        }
+
+        .weak {
+            color: #FF5252;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Cybersecurity Tools</h1>
+            <nav>
+                <ul>
+                    <li><a href="#generator">Password Generator</a></li>
+                    <li><a href="#checker">Password Checker</a></li>
+                    <li><a href="#modifier">Password Modifier</a></li>
+                </ul>
+            </nav>
+        </header>
+        
+        <section id="generator" class="section">
+            <h2>Password Generator</h2>
+            <form id="passwordForm">
+                <label for="passwordLength">Length:</label>
+                <input type="number" id="passwordLength" min="8" max="128" required>
+                
+                <div class="checkbox-group">
+                    <label><input type="checkbox" id="includeUppercase"> Include Uppercase</label>
+                    <label><input type="checkbox" id="includeLowercase"> Include Lowercase</label>
+                    <label><input type="checkbox" id="includeNumbers"> Include Numbers</label>
+                    <label><input type="checkbox" id="includeSpecialChars"> Include Special Characters</label>
+                </div>
+
+                <button type="button" onclick="generatePassword()">Generate Password</button>
+                <p id="generatedPassword"></p>
+            </form>
+        </section>
+        
+        <section id="checker" class="section">
+            <h2>Password Strength Checker</h2>
+            <div class="input-container">
+                <label for="password">Enter your password:</label>
+                <input type="password" id="password" oninput="checkPasswordStrength()">
+            </div>
+            <div class="strength-container">
+                <p id="password-strength"></p>
+                <p id="password-criteria"></p>
+            </div>
+        </section>
+        
+        <section id="modifier" class="section">
+            <h2>Password Modifier</h2>
+            <form id="modifierForm">
+                <label for="passwordToModify">Enter your password:</label>
+                <input type="password" id="passwordToModify">
+                <button type="button" onclick="modifyPassword()">Modify Password</button>
+                <p id="modifiedPassword"></p>
+            </form>
+        </section>
+    </div>
+    <script>
+        function checkPasswordStrength() {
+            const password = document.getElementById("password").value;
+            const strengthBadge = document.getElementById("password-strength");
+            const criteriaBadge = document.getElementById("password-criteria");
+
+            if (password.length >= 12) {
+                strengthBadge.className = "good";
+                strengthBadge.textContent = "Strong";
+            } else if (password.length >= 8) {
+                strengthBadge.className = "moderate";
+                strengthBadge.textContent = "Moderate";
+            } else {
+                strengthBadge.className = "weak";
+                strengthBadge.textContent = "Weak";
+            }
+
+            const criteriaMet = password.match(/[A-Z]/) && password.match(/[a-z]/) && password.match(/[0-9]/) && password.match(/[^A-Za-z0-9]/);
+            criteriaBadge.textContent = criteriaMet ? "Meets criteria" : "Doesn't meet criteria";
+            criteriaBadge.className = criteriaMet ? "good" : "weak";
+        }
+
+        function generatePassword() {
+            const passwordLength = document.getElementById("passwordLength").value || 12;
+            const includeUppercase = document.getElementById("includeUppercase").checked;
+            const includeLowercase = document.getElementById("includeLowercase").checked;
+            const includeNumbers = document.getElementById("includeNumbers").checked;
+            const includeSpecialChars = document.getElementById("includeSpecialChars").checked;
+
+            if (!includeUppercase && !includeLowercase && !includeNumbers && !includeSpecialChars) {
+                alert("Select at least one character type.");
+                return;
+            }
+
+            let charset = '';
+            if (includeUppercase) charset += 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            if (includeLowercase) charset += 'abcdefghijklmnopqrstuvwxyz';
+            if (includeNumbers) charset += '0123456789';
+            if (includeSpecialChars) charset += '!@#$%^&*()_+';
+
+            let password = '';
+            for (let i = 0; i < passwordLength; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                password += charset.charAt(randomIndex);
+            }
+
+            document.getElementById("generatedPassword").innerText = "Generated Password: " + password;
+        }
+
+        function modifyPassword() {
+            const passwordToModify = document.getElementById("passwordToModify").value;
+            const randomString = generateRandomString(8); 
+            const modifiedPassword = `${passwordToModify}${randomString}`;
+
+            if (checkPasswordSecurity(passwordToModify)) {
+                document.getElementById("modifiedPassword").innerText = "Secure Password: " + passwordToModify;
+            } else {
+                document.getElementById("modifiedPassword").innerText = "Modified Password: " + modifiedPassword;
+            }
+        }
+
+        function generateRandomString(length) {
+            const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+';
+            let randomString = '';
+            for (let i = 0; i < length; i++) {
+                const randomIndex = Math.floor(Math.random() * charset.length);
+                randomString += charset.charAt(randomIndex);
+            }
+            return randomString;
+        }
+
+        function checkPasswordSecurity(password) {
+            return password.length >= 12 && password.match(/[A-Z]/) && password.match(/[a-z]/) && password.match(/[0-9]/) && password.match(/[^A-Za-z0-9]/);
+        }
+    </script>
+</body>
+</html>
